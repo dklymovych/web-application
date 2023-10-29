@@ -34,14 +34,6 @@ export default function SignupPage() {
             size='small'
             margin="normal"
             fullWidth
-            id="email"
-            label="Email"
-            name="email"
-          />
-          <TextField
-            size='small'
-            margin="normal"
-            fullWidth
             name="password"
             label="Password"
             type="password"

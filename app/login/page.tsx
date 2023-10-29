@@ -26,9 +26,9 @@ export default function LoginPage() {
             size='small'
             margin="normal"
             fullWidth
-            id="email"
-            label="Email"
-            name="email"
+            id="username"
+            label="Username"
+            name="username"
           />
           <TextField
             size='small'
