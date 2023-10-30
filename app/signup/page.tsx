@@ -1,10 +1,52 @@
+'use client'
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
 
 export default function SignupPage() {
+  const [passwordError, setPasswordError] = useState(false)
+  const [emptyFieldsError, setEmptyFieldsError] = useState(false)
+  const [userExistError, setUserExistError] = useState(false)
+  const router = useRouter()
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const username = data.get('username')
+    const password = data.get('password')
+
+    if (!username || !password) {
+      setEmptyFieldsError(true)
+      return
+    }
+
+    if (password !== data.get('password2')) {
+      setPasswordError(true)
+      return
+    }
+    
+    const res = await fetch('/api/auth/signup', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password })
+    })
+
+    if (res.status == 201) {
+      router.push('/login')
+    } else if (res.status == 400) {
+      setUserExistError(true)
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -21,7 +63,7 @@ export default function SignupPage() {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <Box component="form" noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             size='small'
             margin="normal"
@@ -58,6 +100,24 @@ export default function SignupPage() {
           </Button>
         </Box>
       </Box>
+      {emptyFieldsError ?
+        <Alert severity="error" sx={{ mt: 1 }}>
+          The fields must not be empty!
+        </Alert>
+        : undefined
+      }
+      {passwordError ?
+        <Alert severity="error" sx={{ mt: 1 }}>
+          Password field must match confirm password field!
+        </Alert>
+        : undefined
+      }
+      {userExistError ?
+        <Alert severity="error" sx={{ mt: 1 }}>
+          The user exists!
+        </Alert>
+        : undefined
+      }
     </Container>
   )
 }
