@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import Alert from '@mui/material/Alert'
 
 export default function SignupPage() {
   const [passwordError, setPasswordError] = useState(false)
@@ -45,7 +45,7 @@ export default function SignupPage() {
     } else if (res.status == 400) {
       setUserExistError(true)
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
