@@ -1,8 +1,8 @@
 import fs from 'fs'
-import * as jose from 'jose'
 import { writeFile } from 'fs/promises'
 import { bucket, tasks } from '@/lib/database'
 import { getUserId } from '@/lib/auth'
+import { ObjectId } from 'mongodb'
 
 export async function POST(req: Request) {
   const token = req.headers.get('Authorization')
@@ -26,8 +26,10 @@ export async function POST(req: Request) {
   readableStream.pipe(uploadStream)
 
   await tasks.insertOne({
-    'user_id': user_id,
-    'input_id': uploadStream.id
+    'user_id': new ObjectId(user_id),
+    'input_id': uploadStream.id,
+    'created_at': new Date(Date.now()),
+    'progress': 0
   })
 
   return new Response(undefined, { status: 201 })
