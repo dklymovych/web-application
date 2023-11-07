@@ -34,14 +34,23 @@ export default function HomePage() {
   }, [load])
 
   useEffect(() => {
-    const timer = setInterval(() => {
-    }, 5000);
+    const timer = setInterval(async () => {
+      fetch('/api/tasks/progress', {
+        method: 'GET',
+        headers: { 'Authorization': getToken() || '' }
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setProgress(data)
 
-    for (let pr in progress) {
-      if (progress[pr] == 100) {
-        setLoad(true)
-      }
-    }
+        for (let key in data) {
+          if (data[key] == 100) {
+            // setLoad(true)
+            break
+          }
+        }
+      })
+    }, 5000);
 
     return () => {
       clearInterval(timer);
@@ -117,7 +126,7 @@ export default function HomePage() {
         </Button>
       </Box>
       <Box>
-        {tasks.map(({ _id, input_id, output_id, created_at }, i) => (
+        {tasks.map(({ _id, output_id, created_at }, i) => (
           <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',

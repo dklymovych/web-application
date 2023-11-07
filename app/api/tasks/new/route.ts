@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises'
 import { bucket, tasks } from '@/lib/database'
 import { getUserId } from '@/lib/auth'
 import { ObjectId } from 'mongodb'
+import { new_task } from '@/lib/communication'
 
 export async function POST(req: Request) {
   const token = req.headers.get('Authorization')
@@ -25,12 +26,13 @@ export async function POST(req: Request) {
   const uploadStream = bucket.openUploadStream('graph.dat') 
   readableStream.pipe(uploadStream)
 
-  await tasks.insertOne({
+  const task = await tasks.insertOne({
     'user_id': new ObjectId(user_id),
     'input_id': uploadStream.id,
     'created_at': new Date(Date.now()),
-    'progress': 0
+    'progress': 100
   })
 
+  new_task(task.insertedId.toString())
   return new Response(undefined, { status: 201 })
 }
