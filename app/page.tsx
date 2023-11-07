@@ -9,6 +9,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
+import { Header } from '@/components/Header'
 
 export default function HomePage() {
   const [tasks, setTasks] = useState([])
@@ -41,16 +42,16 @@ export default function HomePage() {
       })
       .then((res) => res.json())
       .then((data) => {
-        setProgress(data)
-
         for (let key in data) {
-          if (data[key] == 100) {
-            // setLoad(true)
+          if (data[key] == 100 && progress[key] != 100) {
+            setLoad(true)
             break
           }
         }
+
+        setProgress(data)
       })
-    }, 5000);
+    }, 2000);
 
     return () => {
       clearInterval(timer);
@@ -97,6 +98,27 @@ export default function HomePage() {
     setLoad(true)
   }
 
+  const downloadResult = async (task_id: string) => {
+    const res = await fetch(`/api/tasks/${task_id}/output`, {
+      method: 'GET',
+      headers: {
+        'Authorization': getToken() || ''
+      }
+    })
+
+    const formData = await res.formData()
+
+    const url = window.URL.createObjectURL(formData.get('file') as Blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = 'result.dat';
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    setLoad(true)
+  }
+
   const deleteTask = async (task_id: string) => {
     await fetch(`/api/tasks/${task_id}`, {
       method: 'DELETE',
@@ -108,6 +130,8 @@ export default function HomePage() {
   }
 
   return (
+    <>
+    <Header />
     <Container component="main" maxWidth="md">
       <Box sx={{
         marginTop: 2,
@@ -168,7 +192,7 @@ export default function HomePage() {
                 Data 
               </Button>
               {output_id && <>
-                <Button variant="contained" sx={{ marginLeft: '10px' }}>
+                <Button variant="contained" onClick={() => downloadResult(_id)} sx={{ marginLeft: '10px' }}>
                   Result
                 </Button>
               </>} 
@@ -180,5 +204,6 @@ export default function HomePage() {
         ))}
       </Box>
     </Container>
+    </>
   )
 }
