@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Alert from '@mui/material/Alert'
+import { Header } from '@/components/Header'
 
 export default function SignupPage() {
   const [passwordError, setPasswordError] = useState(false)
@@ -48,6 +49,8 @@ export default function SignupPage() {
   }
 
   return (
+    <>
+    <Header />
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
@@ -119,5 +122,6 @@ export default function SignupPage() {
         : undefined
       }
     </Container>
+    </>
   )
 }

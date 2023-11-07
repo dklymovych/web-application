@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     'user_id': new ObjectId(user_id),
     'input_id': uploadStream.id,
     'created_at': new Date(Date.now()),
-    'progress': 100
+    'progress': 0
   })
 
   new_task(task.insertedId.toString())

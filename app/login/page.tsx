@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Alert from '@mui/material/Alert'
+import { Header } from '@/components/Header'
 
 export default function LoginPage() {
   const [emptyFieldsError, setEmptyFieldsError] = useState(false)
@@ -44,6 +45,8 @@ export default function LoginPage() {
   }
 
   return (
+    <>
+    <Header />
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
@@ -100,5 +103,6 @@ export default function LoginPage() {
         : undefined
       }
     </Container>
+    </>
   )
 }

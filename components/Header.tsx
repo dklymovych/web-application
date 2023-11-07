@@ -21,7 +21,7 @@ export function Header() {
         <Button color="inherit" component="div">
           <Link href="/">Home</Link>
         </Button>
-        {getToken === null ?
+        {getToken() === null ?
           <>
             <Button color="inherit" component="div" sx={{ ml: "auto" }}>
               <Link href="/login">Sign in</Link>
