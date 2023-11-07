@@ -7,6 +7,10 @@ void task(Matrix& dist, Matrix& next, size_t start, size_t end) {
     auto [n, _] = dist.size();
 
     for (size_t k = start; k < end; ++k) {
+        if (start == 0) {
+            std::cout << ((k + 1) * 100) / end << std::endl;
+        }
+
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < n; ++j) {
                 int tmp = dist(i, k) + dist(k, j);
