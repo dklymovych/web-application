@@ -1,6 +1,6 @@
-import { getUserId } from "@/lib/auth"
+import { getUserId } from '@/lib/auth'
 import { tasks } from '@/lib/database'
-import { ObjectId } from "mongodb"
+import { ObjectId } from 'mongodb'
 
 export async function GET(req: Request) {
   const token = req.headers.get('Authorization')
