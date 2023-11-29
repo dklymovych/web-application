@@ -10,11 +10,13 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Header } from '@/components/Header'
+import Alert from '@mui/material/Alert'
 
 export default function HomePage() {
   const [tasks, setTasks] = useState([])
   const [load, setLoad] = useState(true)
-  const [progress, setProgress] = useState({});
+  const [progress, setProgress] = useState({})
+  const [fileError, setFileError] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function HomePage() {
       })
 
     setLoad(false)
+    setFileError(false)
   }, [load])
 
   useEffect(() => {
@@ -62,6 +65,10 @@ export default function HomePage() {
     const files = event.target.files
 
     if (files !== null) {
+      if (files[0].size > 5000000) {
+        setFileError(true)
+        return
+      }
       const body = new FormData()
       body.set('file', files[0])
 
@@ -203,6 +210,11 @@ export default function HomePage() {
           </Box>
         ))}
       </Box>
+      {fileError &&
+        <Alert severity="error" sx={{ mt: 1 }}>
+          The file size must not exceed 5mb!
+        </Alert>
+      }
     </Container>
     </>
   )

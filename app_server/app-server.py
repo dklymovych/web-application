@@ -32,8 +32,11 @@ def run_command(cmd):
 
 
 def run_task(task_id, n_threads=1):
-    current_task = tasks.find_one({"_id": task_id})
-    input_id = current_task.get("input_id")
+    try:
+        current_task = tasks.find_one({"_id": task_id})
+        input_id = current_task.get("input_id")
+    except Exception:
+        return
 
     with tempfile.NamedTemporaryFile(delete=False) as input_file:
         input_file.write(fs.get(input_id).read())
